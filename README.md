@@ -1,1 +1,1 @@
-# My Java Project
+# Sudoku Generator
