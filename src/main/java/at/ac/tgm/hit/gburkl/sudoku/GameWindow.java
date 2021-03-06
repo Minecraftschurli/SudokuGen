@@ -20,10 +20,10 @@ public class GameWindow extends JFrame {
         final JButton checkBtn = new JButton("CHECK");
         checkBtn.addActionListener(e -> {
             if (sudoku.checkSpiel()) {
-                //displayCorrect();
                 sudoku.lock();
+                JOptionPane.showMessageDialog(this, "Correct!", "Correct!", JOptionPane.PLAIN_MESSAGE);
             } else {
-                //displayIncorrect();
+                JOptionPane.showMessageDialog(this, "Incorrect!\nTry again.", "Incorrect!", JOptionPane.ERROR_MESSAGE);
             }
         });
         buttons.add(checkBtn);
