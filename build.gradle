@@ -1,10 +1,12 @@
 plugins {
     id 'java'
+    id 'application'
     id 'idea'
 }
 
-group 'at.ac.tgm.hit.gburkl'
-version '1.0'
+group = 'at.ac.tgm.hit.gburkl'
+version = '1.0'
+mainClassName = "${group}.sudoku.Main"
 
 repositories {
     mavenCentral()
@@ -15,17 +17,22 @@ dependencies {
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
+    description = 'Assembles a jar archive containing the main sources'
+    archiveClassifier.set 'sources'
     from sourceSets.main.allSource
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
+    description = 'Assembles a jar archive containing the javadoc of the main sources'
+    archiveClassifier.set 'javadoc'
     from javadoc.destinationDir
 }
 
 task universalJar(type: Jar, dependsOn: compileJava) {
-    classifier = 'universal'
+    description = 'Assembles a jar archive containing the main classes and sources'
+    archiveClassifier.set 'universal'
     from sourceSets.main.output
     from sourceSets.main.allSource
 }
+
+tasks.withType(Jar).configureEach({group = 'jar'})

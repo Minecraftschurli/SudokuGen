@@ -1,4 +1,4 @@
-package generator;
+package at.ac.tgm.hit.gburkl.sudoku;
 
 /**
  * @author Georg Burkl <gburkl@student.tgm.ac.at>

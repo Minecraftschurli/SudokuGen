@@ -1,4 +1,4 @@
-package generator;
+package at.ac.tgm.hit.gburkl.sudoku;
 
 import javax.swing.*;
 
