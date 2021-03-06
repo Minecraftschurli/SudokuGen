@@ -1,4 +1,4 @@
-package generator;
+package at.ac.tgm.hit.gburkl.sudoku;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -34,15 +34,14 @@ public class SudokuSpiel {
 
     private void randomize() {
         final Random random = new Random();
-        for (int i = 0; i < (dimensions / 3); i++) {
-            while (true) {
-                int row = random.nextInt(dimensions);
-                int col = random.nextInt(dimensions);
-                if(this.unsolved[row][col] != 0) {
-                    this.unsolved[row][col] = 0;
-                    break;
-                }
-            }
+        for (int i = 0; i < (dimensions*dimensions / 3) * 2; i++) {
+            int row;
+            int col;
+            do {
+                row = random.nextInt(dimensions);
+                col = random.nextInt(dimensions);
+            } while (this.unsolved[row][col] == 0);
+            this.unsolved[row][col] = 0;
         }
     }
 
@@ -75,6 +74,7 @@ public class SudokuSpiel {
         for (int i = 0; i < sub; i++) { // row block
             for (int j = 0; j < sub; j++) { // row
                 for (int k = 0; k < sub; k++) { // col block
+                    result.append("|");
                     for (int l = 0; l < sub; l++) { // col
                         int x = arr[i*sub+j][k*sub+l];
                         if(x==0) {
@@ -83,7 +83,6 @@ public class SudokuSpiel {
                             result.append(x);
                         }
                     }
-                    result.append("|");
                 }
                 result.append("|\n");
             }

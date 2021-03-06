@@ -1,4 +1,4 @@
-package generator;
+package at.ac.tgm.hit.gburkl.sudoku;
 
 /**
  * @author Georg Burkl <gburkl@student.tgm.ac.at>
@@ -7,10 +7,10 @@ package generator;
 public class Main {
     public static void main(String[] args) {
         GameStore store = new GameStore();
-        Thread gt1 = new Thread(new GeneratorRunner(store, true));
-        Thread gt2 = new Thread(new GeneratorRunner(store));
-        Thread rt1 = new Thread(new ReadRunner(store));
-        Thread rt2 = new Thread(new ReadRunner(store));
+        Thread gt1 = new GeneratorThread(store, true);
+        Thread gt2 = new GeneratorThread(store);
+        Thread rt1 = new ReadThread(store);
+        Thread rt2 = new ReadThread(store);
 
         gt1.setName("GeneratorThread1");
         gt2.setName("GeneratorThread2");
