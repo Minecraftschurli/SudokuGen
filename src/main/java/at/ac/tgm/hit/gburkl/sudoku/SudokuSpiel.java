@@ -13,6 +13,12 @@ public class SudokuSpiel {
     private final int dimensions;
     private final int sub;
 
+    /**
+     * Create a new {@link SudokuSpiel} from a 2d array of ints
+     *
+     * @param field the 2d int array of values for this sudoku
+     * @throws IllegalArgumentException if the field parameter is invalid (either not the right dimensions or null)
+     */
     public SudokuSpiel(int[][] field) {
         if (field == null) {
             throw new IllegalArgumentException("Feld must not be null!");
@@ -24,10 +30,18 @@ public class SudokuSpiel {
         this.randomize();
     }
 
+    /**
+     * Format the unsolved sudoku as string and return it
+     * @return the formatted unsolved sudoku
+     */
     public synchronized String displayUnsolved() {
         return display(this.unsolved, this.sub);
     }
 
+    /**
+     * Format the solved sudoku as string and return it
+     * @return the formatted solved sudoku
+     */
     public synchronized String displaySolved() {
         return display(this.solved, this.sub);
     }
@@ -92,15 +106,3 @@ public class SudokuSpiel {
         return result.toString();
     }
 }
-
-/*
-if (row >= this.dimensions || row < 0) {
-    throw new IllegalArgumentException("Row index out of bounds!");
-}
-if (col >= this.dimensions || col < 0) {
-    throw new IllegalArgumentException("Col index out of bounds!");
-}
-if (num > this.dimensions || num <= 0) {
-    throw new IllegalArgumentException("Number has to be max %d and greater than 0".formatted(this.dimensions));
-}
-*/
