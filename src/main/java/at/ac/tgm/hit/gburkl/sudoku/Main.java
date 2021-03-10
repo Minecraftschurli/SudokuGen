@@ -7,8 +7,8 @@ package at.ac.tgm.hit.gburkl.sudoku;
 public class Main {
     public static void main(String[] args) {
         GameStore store = new GameStore();
-        Thread gt1 = new Thread(new GeneratorTask(store, true));
-        Thread gt2 = new Thread(new GeneratorTask(store));
+        Thread gt1 = new Thread(GeneratorTask.createLarge(store));
+        Thread gt2 = new Thread(GeneratorTask.createSmall(store));
         Thread rt1 = new Thread(new ReadTask(store));
         Thread rt2 = new Thread(new ReadTask(store));
 

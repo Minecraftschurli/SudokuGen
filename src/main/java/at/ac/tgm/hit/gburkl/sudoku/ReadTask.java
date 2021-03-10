@@ -8,10 +8,17 @@ public class ReadTask implements Runnable {
 
     private final GameStore store;
 
+    /**
+     * Create a new {@link ReadTask} with the associated {@link GameStore}
+     * @param store the store to get values from
+     */
     public ReadTask(GameStore store) {
         this.store = store;
     }
 
+    /**
+     * Print {@link SudokuSpiel} values from the {@link GameStore} until the thread is interrupted
+     */
     @Override
     public void run() {
         while (!Thread.currentThread().isInterrupted()) {
