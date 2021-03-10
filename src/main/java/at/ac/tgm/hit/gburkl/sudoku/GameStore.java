@@ -10,46 +10,41 @@ import java.util.concurrent.locks.*;
  */
 public class GameStore {
     private final Lock lock = new ReentrantLock();
-    private final Condition condition = lock.newCondition();
+    private final Condition full = lock.newCondition();
+    private final Condition empty = lock.newCondition();
     private final Queue<SudokuSpiel> store = new ConcurrentLinkedQueue<>();
 
-    public void awaitCondition() {
-        lock.lock();
+    public void put(SudokuSpiel spiel) {
+        this.lock.lock();
         try {
-            condition.await();
+            if(this.store.size() >= 20) {
+                while (this.store.size() > 15) {
+                    this.full.await();
+                }
+            }
+            this.store.add(spiel);
+            this.empty.signalAll();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         } finally {
-            lock.unlock();
-        }
-    }
-
-    public int size() {
-        lock.lock();
-        try {
-            return this.store.size();
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    public void put(SudokuSpiel spiel) {
-        lock.lock();
-        try {
-            this.store.add(spiel);
-            condition.signalAll();
-        } finally {
-            lock.unlock();
+            this.lock.unlock();
         }
     }
 
     public SudokuSpiel get() {
-        lock.lock();
+        this.lock.lock();
         try {
+            if (this.store.size() <= 0) {
+                while (this.store.size() < 5) {
+                    this.empty.await();
+                }
+            }
             return this.store.poll();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         } finally {
-            condition.signalAll();
-            lock.unlock();
+            this.full.signalAll();
+            this.lock.unlock();
         }
     }
 }

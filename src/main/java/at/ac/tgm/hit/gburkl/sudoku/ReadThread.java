@@ -16,11 +16,6 @@ public class ReadThread extends Thread {
     @Override
     public void run() {
         while (!this.isInterrupted()) {
-            if (this.store.size() <= 0) {
-                while (this.store.size() < 5) {
-                    this.store.awaitCondition();
-                }
-            }
             System.out.println(Thread.currentThread().getName());
             System.out.println(this.store.get().displayUnsolved());
         }

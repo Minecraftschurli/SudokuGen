@@ -9,10 +9,10 @@ import javax.swing.*;
 public class Main {
     public static void main(String[] args) {
         GameStore store = new GameStore();
-        Thread gt1 = new GeneratorThread(store, true);
-        Thread gt2 = new GeneratorThread(store);
-        Thread rt1 = new ReadThread(store);
-        Thread rt2 = new ReadThread(store);
+        Thread gt1 = new Thread(new GeneratorTask(store, true));
+        Thread gt2 = new Thread(new GeneratorTask(store));
+        Thread rt1 = new Thread(new ReadThread(store));
+        Thread rt2 = new Thread(new ReadThread(store));
 
         gt1.setName("GeneratorThread1");
         gt2.setName("GeneratorThread2");
