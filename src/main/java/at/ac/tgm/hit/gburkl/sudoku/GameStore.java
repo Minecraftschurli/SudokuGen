@@ -10,8 +10,8 @@ import java.util.concurrent.locks.*;
  */
 public class GameStore {
     private final Lock lock = new ReentrantLock();
-    private final Condition full = lock.newCondition();
-    private final Condition empty = lock.newCondition();
+    private final Condition notFull = lock.newCondition();
+    private final Condition notEmpty = lock.newCondition();
     private final Queue<SudokuSpiel> store = new ConcurrentLinkedQueue<>();
 
     /**
@@ -27,11 +27,11 @@ public class GameStore {
         try {
             if(this.store.size() >= 20) {
                 while (this.store.size() > 15) {
-                    this.full.await();
+                    this.notFull.await();
                 }
             }
             this.store.add(spiel);
-            this.empty.signalAll();
+            this.notEmpty.signalAll();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         } finally {
@@ -52,14 +52,14 @@ public class GameStore {
         try {
             if (this.store.size() <= 0) {
                 while (this.store.size() < 5) {
-                    this.empty.await();
+                    this.notEmpty.await();
                 }
             }
             return this.store.poll();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         } finally {
-            this.full.signalAll();
+            this.notFull.signalAll();
             this.lock.unlock();
         }
     }
