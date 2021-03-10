@@ -11,27 +11,71 @@ public class SudokuSpiel {
     private final int[][] unsolved;
     private final int[][] solved;
     private final int dimensions;
-//    private final int sub;
 
+    /**
+     * Create a new {@link SudokuSpiel} from a 2d array of ints
+     *
+     * @param field the 2d int array of values for this sudoku
+     * @throws IllegalArgumentException if the field parameter is invalid (either not the right dimensions or null)
+     */
     public SudokuSpiel(int[][] field) {
         if (field == null) {
             throw new IllegalArgumentException("Feld must not be null!");
         }
         this.dimensions = checkDimensions(field);
-//        this.sub = (int) Math.sqrt(this.dimensions);
         this.unsolved = deepCopy(field);
         this.solved = deepCopy(field);
         this.randomize();
     }
 
-    /*
-    public synchronized String displayUnsolved() {
-        return display(this.unsolved, this.sub);
+    /**
+     * Get the dimensions for this sudoku (9 for large or 4 for small)
+     *
+     * @return the dimensions of this sudoku
+     */
+    public int getDimensions() {
+        return this.dimensions;
     }
 
-    public synchronized String displaySolved() {
-        return display(this.solved, this.sub);
-    }*/
+    /**
+     * Get the number from the unsolved sudoku at the position (row, col)
+     *
+     * @param row the row of the value
+     * @param col the column of the value
+     * @return the number at position (row,col) in the unsolved sudoku or 0 if empty
+     * @throws IllegalArgumentException if one or both parameters are either to small or to large
+     */
+    public int get(int row, int col) {
+        if (row >= this.dimensions || row < 0) {
+            throw new IllegalArgumentException("Row index out of bounds!");
+        }
+        if (col >= this.dimensions || col < 0) {
+            throw new IllegalArgumentException("Col index out of bounds!");
+        }
+        return this.unsolved[row][col];
+    }
+
+    /**
+     * Check the number num against the one at position (row,col)
+     *
+     * @param row the row of the value
+     * @param col the column of the value
+     * @param num the number to check
+     * @return true if the number is correct otherwise false
+     * @throws IllegalArgumentException if one or more parameters are either to small or to large
+     */
+    public boolean check(int row, int col, int num) {
+        if (row >= this.dimensions || row < 0) {
+            throw new IllegalArgumentException("Row index out of bounds!");
+        }
+        if (col >= this.dimensions || col < 0) {
+            throw new IllegalArgumentException("Col index out of bounds!");
+        }
+        if (num > this.dimensions || num <= 0) {
+            throw new IllegalArgumentException("Number has to be max %d and greater than 0".formatted(this.dimensions));
+        }
+        return this.solved[row][col] == num;
+    }
 
     private void randomize() {
         final Random random = new Random();
@@ -68,49 +112,5 @@ public class SudokuSpiel {
             result[i] = Arrays.copyOf(original[i], original[i].length);
         }
         return result;
-    }
-
-    /*private static String display(int[][] arr, int sub) {
-        String delimRow =("+"+("-".repeat(sub))).repeat(sub)+"+\n";
-        StringBuilder result = new StringBuilder(delimRow);
-        for (int i = 0; i < sub; i++) { // row block
-            for (int j = 0; j < sub; j++) { // row
-                for (int k = 0; k < sub; k++) { // col block
-                    result.append("|");
-                    for (int l = 0; l < sub; l++) { // col
-                        int x = arr[i*sub+j][k*sub+l];
-                        if(x==0) {
-                            result.append(' ');
-                        } else {
-                            result.append(x);
-                        }
-                    }
-                }
-                result.append("|\n");
-            }
-            result.append(delimRow);
-        }
-        return result.toString();
-    }*/
-
-    public int getDimension() {
-        return this.dimensions;
-    }
-
-    public int get(int row, int col) {
-        return this.unsolved[row][col];
-    }
-
-    public boolean check(int row, int col, int num) {
-        if (row >= this.dimensions || row < 0) {
-            throw new IllegalArgumentException("Row index out of bounds!");
-        }
-        if (col >= this.dimensions || col < 0) {
-            throw new IllegalArgumentException("Col index out of bounds!");
-        }
-        if (num > this.dimensions || num <= 0) {
-            throw new IllegalArgumentException("Number has to be max %d and greater than 0".formatted(this.dimensions));
-        }
-        return this.solved[row][col] == num;
     }
 }

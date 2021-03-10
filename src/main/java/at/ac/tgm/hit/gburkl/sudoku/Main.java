@@ -11,8 +11,8 @@ public class Main {
     public static void main(String[] args) {
         GameStore store = new GameStore();
         final ExecutorService threadPool = Executors.newFixedThreadPool(4);
-        threadPool.submit(new GeneratorTask(store));
-        threadPool.submit(new GeneratorTask(store, true));
+        threadPool.submit(GeneratorTask.createSmall(store));
+        threadPool.submit(GeneratorTask.createLarge(store));
         new GameWindow(store);
     }
 }

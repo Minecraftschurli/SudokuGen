@@ -13,6 +13,11 @@ public class SudokuView extends JLayeredPane {
     private JTextField[][] numbers;
     private final JPanel numberPanel = new JPanel();
 
+    /**
+     * Create a new {@link SudokuView} and set the initial {@link SudokuSpiel}
+     *
+     * @param spiel the initial value for the {@link SudokuSpiel} associated with this
+     */
     public SudokuView(SudokuSpiel spiel) {
         this.setSpiel(spiel);
         setLayout(new GridBagLayout());
@@ -20,17 +25,12 @@ public class SudokuView extends JLayeredPane {
         this.addLayer(new Grid(), PALETTE_LAYER);
     }
 
-    public void addLayer(JComponent component, int layer) {
-        this.setLayer(component, layer);
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 1;
-        gbc.weighty = 1;
-        gbc.fill = GridBagConstraints.BOTH;
-        add(component, gbc);
-    }
-
+    /**
+     * Set the {@link SudokuSpiel} associated with this {@link SudokuView}
+     * <br/>
+     * <b>WARNING! recreates the underlying data structure if the new {@link SudokuSpiel} has not the same size as the old</b>
+     * @param spiel the new {@link SudokuSpiel} associated with this
+     */
     public void setSpiel(SudokuSpiel spiel) {
         if (spiel == null) {
             throw new IllegalArgumentException("Spiel must not be null!");
@@ -38,8 +38,8 @@ public class SudokuView extends JLayeredPane {
         if (!spiel.equals(this.spiel)) {
             this.spiel = spiel;
             this.numberPanel.removeAll();
-            if (this.dimension != this.spiel.getDimension()) {
-                this.dimension = this.spiel.getDimension();
+            if (this.dimension != this.spiel.getDimensions()) {
+                this.dimension = this.spiel.getDimensions();
                 this.numbers = new JTextField[this.dimension][this.dimension];
                 this.numberPanel.setLayout(new GridLayout(this.dimension, this.dimension));
             }
@@ -53,6 +53,10 @@ public class SudokuView extends JLayeredPane {
         }
     }
 
+    /**
+     * Check the values of the inputs against the associated {@link SudokuSpiel}
+     * @return true if the values are correct otherwise false
+     */
     public boolean checkSpiel() {
         for (int row = 0; row < this.dimension; row++) {
             for (int col = 0; col < this.dimension; col++) {
@@ -71,6 +75,9 @@ public class SudokuView extends JLayeredPane {
         return true;
     }
 
+    /**
+     * Locks the inputs of this {@link SudokuView}
+     */
     public void lock() {
         for (int row = 0; row < this.dimension; row++) {
             for (int col = 0; col < this.dimension; col++) {
@@ -79,7 +86,18 @@ public class SudokuView extends JLayeredPane {
         }
     }
 
-    static class Number extends JTextField {
+    private void addLayer(JComponent component, int layer) {
+        this.setLayer(component, layer);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+        gbc.fill = GridBagConstraints.BOTH;
+        add(component, gbc);
+    }
+
+    private static class Number extends JTextField {
         public Number(int num) {
             super(num > 0 ? String.valueOf(num) : "", 1);
             this.setFont(this.getFont().deriveFont(Font.BOLD, 30));
@@ -88,7 +106,7 @@ public class SudokuView extends JLayeredPane {
         }
     }
 
-    class Grid extends JComponent {
+    private class Grid extends JComponent {
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);

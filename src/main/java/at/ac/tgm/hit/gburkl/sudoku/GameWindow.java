@@ -2,6 +2,7 @@ package at.ac.tgm.hit.gburkl.sudoku;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.function.Supplier;
 
 /**
  * @author Georg Burkl <gburkl@student.tgm.ac.at>
@@ -12,7 +13,11 @@ public class GameWindow extends JFrame {
     private final SudokuView sudoku;
     private final JPanel buttons;
 
-    public GameWindow(GameStore store) {
+    /**
+     * Create a new {@link GameWindow} with the given {@link Supplier} to get new {@link SudokuSpiel} values
+     * @param store the {@link Supplier} of {@link SudokuSpiel} values
+     */
+    public GameWindow(Supplier<SudokuSpiel> store) {
         this.setLayout(new BorderLayout());
         sudoku = new SudokuView(store.get());
         this.add(sudoku, BorderLayout.CENTER);
@@ -42,6 +47,7 @@ public class GameWindow extends JFrame {
     @Override
     public void pack() {
         super.pack();
+        // make the sudoku square
         sudoku.setSize(sudoku.getHeight(), sudoku.getHeight());
         setSize(sudoku.getHeight(),sudoku.getHeight()+buttons.getHeight());
     }
