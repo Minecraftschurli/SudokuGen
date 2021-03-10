@@ -10,16 +10,30 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class GameStore {
     private final Queue<SudokuSpiel> store = new ConcurrentLinkedQueue<>();
 
-    public synchronized int size() {
-        return this.store.size();
-    }
-
     public synchronized void put(SudokuSpiel spiel) {
+        if (this.store.size() >= 20) {
+            while (this.store.size() > 15) {
+                try {
+                    this.wait();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
         this.store.add(spiel);
         this.notifyAll();
     }
 
     public synchronized SudokuSpiel get() {
+        if (this.store.size() <= 0) {
+            while (this.store.size() < 5) {
+                try {
+                    this.wait();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
         SudokuSpiel spiel;
         spiel = this.store.poll();
         this.notifyAll();
