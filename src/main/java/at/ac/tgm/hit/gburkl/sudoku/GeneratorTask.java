@@ -20,12 +20,7 @@ public class GeneratorTask implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
-            if(this.store.size() >= 20) {
-                while (this.store.size() > 15) {
-                    this.store.awaitCondition();
-                }
-            }
+        while (!Thread.currentThread().isInterrupted()) {
             int[][] sudoku = SudokuGenerator.generate(this.small);
             this.store.put(new SudokuSpiel(sudoku));
         }
